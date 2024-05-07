@@ -1,48 +1,36 @@
 #pragma once
 #include <vector>
 #include <optional>
+#include <queue>
 
 template <typename T>
 class PriorityQueue
 {
 public:
-    std::optional<T> min() 
-    { 
-        if (len() == 0) 
-            return std::nullopt; 
-        FindMin();
-        return m_queue[m_minIndex.value()];
+    std::optional<T> min() const 
+    {
+        if (len() == 0)
+            return std::nullopt;
+        return m_queue.top();
     }
     std::optional<T> pop()
     {
         if (len() == 0)
             return std::nullopt;
-        T ret = m_queue[m_minIndex.value()];
-        m_queue.erase(m_queue.begin() + m_minIndex.value());
-        m_minIndex = std::nullopt;
+
+        T ret = m_queue.top();
+        m_queue.pop();
         return ret;
     }
-    void FindMin()
-    {
-        if (m_minIndex.has_value())
-            return;
-        auto min = m_queue[0];
-        m_minIndex = 0;
-        for (int i = 1; i < m_queue.size(); ++i)
-        {
-            auto val = m_queue[i];
-            if (val < min)
-            {
-                min = val;
-                m_minIndex = i;
-            }
-        }
-    }
     size_t len() const noexcept { return m_queue.size(); }
-    void append(const T& item) { m_queue.emplace_back(item); m_minIndex = std::nullopt; }
-    
-private:
-    std::vector<T> m_queue;
-    std::optional<int> m_minIndex{};
-};
+    void append(const T& item) { m_queue.push(item); }
 
+private:
+    struct MinPriority {
+        bool operator()(const T& t1, const T& t2) const {
+            return t1.time > t2.time;
+        }
+    };
+    std::priority_queue<T, std::vector<T>, MinPriority> m_queue;
+
+};
