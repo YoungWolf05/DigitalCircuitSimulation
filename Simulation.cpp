@@ -103,7 +103,7 @@ void Simulation::LayoutFromFile(std::ifstream& is)
 		if (temp == "layout")
 			break;
 	}
-	
+
 	boost::regex xmlRegex("^<\\?xml.*\\?>\n");
 	boost::regex docTypeRegex("^<!DOCTYPE.*?>\n");
 	std::ostringstream sstr;
@@ -129,7 +129,7 @@ int Simulation::Step()
 		transitions.emplace_back(*transition);
 	}
 
-	for (const auto transition : transitions)
+	for (const auto& transition : transitions)
 	{
 		for (auto* gate : transition.gate->GetOutGates())
 		{
@@ -172,6 +172,69 @@ boost::property_tree::ptree Simulation::GetJson()
 	return pt;
 }
 
+void Simulation::WriteToJsonFile(std::ostream& os) const {
+	os << "{";
+	os << "\"circuit\":{";
+	os << "\"gates\":[";
+	bool firstgate = true;
+	for (const auto& [k, v] : m_circuit->GetGates())
+	{
+		if (!firstgate)
+			os << ",";
+		os << "{\"id\":\"" << v.GetName() << "\",";
+		os << "\"table\":\"" << v.GetGateType()->GetTruthTableName() << "\",";
+		os << "\"type\":\"" << v.GetGateType()->GetType() << "\",";
+		os << "\"probed\":\"" << (v.IsProbed() ? "true" : "false") << "\",";
+		os << "\"inputs\":[";
+		bool firstinput = true;
+		for (const auto& [k, v] : v.GetInGates())
+		{
+			if (!firstinput)
+				os << ",";
+			os << "\"" << v->GetName() << "\"";
+			firstinput = false;
+		}
+		os << "],";
+		os << "\"outputs\":[";
+		bool firstoutput = true;
+		for (const auto& v : v.GetOutGates())
+		{
+			if (!firstoutput)
+				os << ",";
+			os << "\"" << v->GetName() << "\"";
+			firstoutput = false;
+		}
+		os << "]";
+		os << "}";
+		firstgate = false;
+	}
+	os << "]},";
+	os << "\"trace\":[";
+	bool firstprobe = true;
+	for (const auto& probe : m_probes)
+	{
+		if (!firstprobe)
+			os << ",";
+		os << "{\"time\":" << probe.time << ",";
+		os << "\"gate\":\"" << probe.gateName << "\",";
+		os << "\"value\":" << probe.newValue << "}";
+		firstprobe = false;
+	}
+	os << "],";
+	os << "\"layout\":";
+	os << "\"";
+	for (const auto& c : m_layout)
+	{
+		if (c == '\n')
+			continue;
+		if (c == '"')
+			os << "\\";
+		os << c;
+	}
+	os << "\"";
+	os << "}";
+}
+
 void Simulation::PrintProbes(std::ostream& os)
 {
 	for (const auto& probe : m_probes)
@@ -180,5 +243,5 @@ void Simulation::PrintProbes(std::ostream& os)
 			continue;
 		os << probe.time << " " << probe.gateName << " " << probe.newValue << std::endl;
 	}
-		
+
 }

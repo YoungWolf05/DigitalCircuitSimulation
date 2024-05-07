@@ -16,11 +16,13 @@ public:
 	int GetOutput() const noexcept { return m_output; }
 	void SetOutput(int value) noexcept { m_output = value; }
 	std::string GetName() const noexcept { return m_name; }
-	std::vector<Gate*> GetOutGates() { return m_outGates; }
+	std::vector<Gate*> GetOutGates() const { return m_outGates; }
 	int GetTransitionOutput() const;
 	int GetTransitionTime(int time) const;
 	void UndoProbe();
 	boost::property_tree::ptree GetJson();
+	const GateType* GetGateType() const { return m_type; }
+	std::map<int, Gate*> GetInGates() const { return m_inGates; }
 private:
 	const GateType* m_type{};
 	std::string m_name;

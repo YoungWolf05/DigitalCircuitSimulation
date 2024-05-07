@@ -17,6 +17,8 @@ public:
 	Gate* GetGate(std::string gateName) { return &(m_gates[gateName]); }
 	std::vector<Gate*> ProbeAllGates();
 	boost::property_tree::ptree GetJson();
+	std::map<std::string, Gate> GetGates() const { return m_gates; };
+	std::map<std::string, TruthTable> GetTruthTables() const { return m_truthTables; }
 private:
 	std::map<std::string, TruthTable> m_truthTables;
 	std::map<std::string, GateType> m_gateTypes;

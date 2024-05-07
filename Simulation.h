@@ -50,6 +50,7 @@ public:
 	void ProbeAllGates() { m_undoLog = m_circuit->ProbeAllGates(); }
 	void UndoProbeAllGates();
 	boost::property_tree::ptree GetJson();
+	void WriteToJsonFile(std::ostream& os) const;
 	void PrintProbes(std::ostream& os);
 private:
 	std::unique_ptr<Circuit> m_circuit;
