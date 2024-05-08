@@ -44,14 +44,14 @@ public:
 	static std::unique_ptr<Simulation> FromFile(std::ifstream& is);
 	void LayoutFromFile(std::ifstream& is);
 	void AddTransition(std::string gateName, int outputValue, int outputTime);
-	Circuit* GetCircut() { return m_circuit.get(); }
-	int Step();
+	Circuit* GetCircut() const { return m_circuit.get(); }
+	void Step();
 	void Run();
 	void ProbeAllGates() { m_undoLog = m_circuit->ProbeAllGates(); }
 	void UndoProbeAllGates();
 	boost::property_tree::ptree GetJson();
 	void WriteToJsonFile(std::ostream& os) const;
-	void PrintProbes(std::ostream& os);
+	void PrintProbes(std::ostream& os) const;
 private:
 	std::unique_ptr<Circuit> m_circuit;
 	std::string m_layout;

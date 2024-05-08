@@ -25,6 +25,6 @@ public:
 private:
     std::string m_name;
     std::vector<int> m_table;
-    int m_inputCount;
+    int m_inputCount{};
 };
 

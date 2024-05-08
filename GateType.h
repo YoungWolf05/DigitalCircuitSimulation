@@ -15,6 +15,6 @@ public:
 	std::string GetType() const { return m_type; }
 private:
 	std::string m_type;
-	const TruthTable* m_truthTable;
-	int m_delay;
+	const TruthTable* m_truthTable{};
+	int m_delay{};
 };
