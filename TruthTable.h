@@ -18,7 +18,7 @@ public:
             m_inputCount = 2;
     }
     int GetOutput(std::vector<int> inputs) const;
-    std::string GetName() const
+    std::string GetName() const noexcept
     {
         return m_name;
     }

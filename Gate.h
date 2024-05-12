@@ -11,18 +11,18 @@ public:
 	explicit Gate(std::string name, const GateType* type) : m_name(name), m_type(type) {};
 	void ConnectInput(int i, Gate* target);
 	void AddOutput(Gate* target);
-	void Probe() noexcept;
+	void Probe();
 	bool IsProbed() const noexcept { return m_probed; }
 	int GetOutput() const noexcept { return m_output; }
 	void SetOutput(int value) noexcept { m_output = value; }
 	std::string GetName() const noexcept { return m_name; }
-	std::vector<Gate*> GetOutGates() const { return m_outGates; }
+	std::vector<Gate*> GetOutGates() const noexcept { return m_outGates; }
 	int GetTransitionOutput() const;
 	int GetTransitionTime(int time) const;
 	void UndoProbe();
 	boost::property_tree::ptree GetJson();
-	const GateType* GetGateType() const { return m_type; }
-	std::map<int, Gate*> GetInGates() const { return m_inGates; }
+	const GateType* GetGateType() const noexcept { return m_type; }
+	std::map<int, Gate*> GetInGates() const noexcept { return m_inGates; }
 private:
 	const GateType* m_type{};
 	std::string m_name;

@@ -10,9 +10,9 @@ public:
 	GateType(std::string type, const TruthTable* truthTable, int delay) 
 		: m_type(type), m_truthTable(truthTable), m_delay(delay) {}
 	int GetOutput(std::vector<int> inputs) const { return m_truthTable->GetOutput(inputs); }
-	int GetDelay() const { return m_delay; }
+	int GetDelay() const noexcept { return m_delay; }
 	std::string GetTruthTableName() const { return m_truthTable->GetName(); }
-	std::string GetType() const { return m_type; }
+	std::string GetType() const noexcept { return m_type; }
 private:
 	std::string m_type;
 	const TruthTable* m_truthTable{};
